@@ -10,10 +10,11 @@ app.use(express.json());
 
 // Conexión a la Base de Datos MySQL
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',      // <-- PON TU USUARIO DE MYSQL AQUÍ
-  password: 'root',      // <-- PON TU CONTRASEÑA DE MYSQL AQUÍ
-  database: 'persilux_db'
+  host: process.env.MYSQLHOST || 'localhost',
+  user: process.env.MYSQLUSER || 'root',
+  password: process.env.MYSQLPASSWORD || 'root',
+  database: process.env.MYSQLDATABASE || 'persilux_db',
+  port: process.env.MYSQLPORT || 3306
 });
 
 db.connect(err => {
@@ -381,5 +382,5 @@ app.get('/api/reportes/ventas', (req, res) => {
     });
   });
 });
-const PORT = 3000;
-app.listen(PORT, () => console.log(`🚀 Servidor backend corriendo en http://localhost:${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Servidor backend corriendo en puerto ${PORT}`));
