@@ -314,8 +314,7 @@ app.post('/api/login', (req, res) => {
   
   // Buscamos al empleado donde el ID (matrícula) y el password coincidan
   const sql = 'SELECT * FROM empleados WHERE id = ? AND password = ?';
-  
-  db.query(sql, [username, password], (err, results) => {
+  db.query(sql, [Number(username), password], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     
     // Si results es mayor a 0, significa que sí encontró al empleado
