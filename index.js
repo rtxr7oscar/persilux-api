@@ -212,14 +212,15 @@ app.delete('/api/pedidos/:id', (req, res) => {
 // ==========================================
 
 // Leer cotizaciones
-app.get('/api/pedidos', (req, res) => {
+// LEER cotizaciones
+app.get('/api/cotizaciones', (req, res) => {
   const sql = `
-    SELECT p.id, c.nombre AS cliente_nombre, c.direccion AS cliente_direccion, pr.nombre AS producto_nombre, 
-           p.medidas, p.cantidad, p.total, p.anticipo, p.saldo, p.estatus, p.fecha_registro 
-    FROM pedidos p
-    JOIN clientes c ON p.cliente_id = c.id
-    JOIN productos pr ON p.producto_id = pr.id
-    ORDER BY p.id DESC
+    SELECT co.id, c.nombre AS cliente_nombre, p.nombre AS producto_nombre,
+           co.medidas, co.cantidad, co.total, co.cliente_id, co.producto_id
+    FROM cotizaciones co
+    JOIN clientes c ON co.cliente_id = c.id
+    JOIN productos p ON co.producto_id = p.id
+    ORDER BY co.id DESC
   `;
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
