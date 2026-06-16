@@ -22,12 +22,12 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-}).promise();
+});
 
-db.query('SELECT 1')
-  .then(() => console.log('✅ Conectado exitosamente a MySQL'))
-  .catch(err => console.error('❌ Error conectando a BD:', err));
-
+db.query('SELECT 1', (err) => {
+  if (err) console.error('❌ Error conectando a BD:', err);
+  else console.log('✅ Conectado exitosamente a MySQL');
+});
 // ==========================================
 // RUTAS DE LA API (Endpoints)
 // ==========================================
