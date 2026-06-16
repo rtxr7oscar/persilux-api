@@ -9,18 +9,20 @@ app.use(cors());
 app.use(express.json());
 
 // Conexión a la Base de Datos MySQL
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.MYSQLHOST || 'localhost',
   user: process.env.MYSQLUSER || 'root',
   password: process.env.MYSQLPASSWORD || 'root',
   database: process.env.MYSQLDATABASE || 'persilux_db',
-  port: process.env.MYSQLPORT || 3306
-});
+  port: process.env.MYSQLPORT || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+}).promise();
 
-db.connect(err => {
-  if (err) { console.error('❌ Error conectando a BD:', err); return; }
-  console.log('✅ Conectado exitosamente a MySQL (persilux_db)');
-});
+db.query('SELECT 1')
+  .then(() => console.log('✅ Conectado exitosamente a MySQL'))
+  .catch(err => console.error('❌ Error conectando a BD:', err));
 
 // ==========================================
 // RUTAS DE LA API (Endpoints)
